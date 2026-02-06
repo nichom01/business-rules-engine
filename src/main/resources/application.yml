@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: business-rules-engine
+  cloud:
+    aws:
+      region:
+        static: ${AWS_REGION:us-east-1}
+      credentials:
+        use-default-aws-credentials-chain: true
+
+sqs:
+  queue-name: ${SQS_QUEUE_NAME:business-rules-queue}
+
+logging:
+  level:
+    com.businessrules: INFO
+    org.drools: WARN
+    org.kie: WARN
+
+server:
+  port: 8080

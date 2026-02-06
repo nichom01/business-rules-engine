@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: business-rules-engine
+  cloud:
+    aws:
+      region:
+        static: ${AWS_REGION:us-east-1}
+      credentials:
+        use-default-aws-credentials-chain: false
+
+# Local SQS Configuration (LocalStack)
+aws:
+  region: ${AWS_REGION:us-east-1}
+  sqs:
+    endpoint: ${AWS_SQS_ENDPOINT:http://localhost:4566}
+  access-key-id: ${AWS_ACCESS_KEY_ID:test}
+  secret-access-key: ${AWS_SECRET_ACCESS_KEY:test}
+
+sqs:
+  queue-name: ${SQS_QUEUE_NAME:business-rules-queue}
+  queue-url: ${SQS_QUEUE_URL:http://localhost:4566/000000000000/business-rules-queue}
+
+logging:
+  level:
+    com.businessrules: DEBUG
+    org.drools: INFO
+    org.kie: INFO
+    io.awspring.cloud: DEBUG
+
+server:
+  port: 8080

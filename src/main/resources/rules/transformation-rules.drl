@@ -1,0 +1,41 @@
+package com.businessrules.rules.transformation
+
+import com.businessrules.model.RuleContext
+import java.util.HashMap
+
+rule "Transform to Uppercase"
+    when
+        context : RuleContext(ruleGroup == "transformation-rules")
+        name : String() from context.getData().get("name")
+        eval(name != null)
+    then
+        Map<String, Object> transformed = new HashMap<>(context.getData());
+        transformed.put("name", name.toUpperCase());
+        context.setTransformedData(transformed);
+end
+
+rule "Add Timestamp"
+    when
+        context : RuleContext(ruleGroup == "transformation-rules")
+    then
+        Map<String, Object> transformed = context.getTransformedData().isEmpty() 
+            ? new HashMap<>(context.getData()) 
+            : context.getTransformedData();
+        transformed.put("processedAt", java.time.Instant.now().toString());
+        context.setTransformedData(transformed);
+end
+
+rule "Calculate Total"
+    when
+        context : RuleContext(ruleGroup == "transformation-rules")
+        price : Number() from context.getData().get("price")
+        quantity : Number() from context.getData().get("quantity")
+        eval(price != null && quantity != null)
+    then
+        Map<String, Object> transformed = context.getTransformedData().isEmpty() 
+            ? new HashMap<>(context.getData()) 
+            : context.getTransformedData();
+        double total = price.doubleValue() * quantity.doubleValue();
+        transformed.put("total", total);
+        context.setTransformedData(transformed);
+end

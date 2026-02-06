@@ -1,0 +1,30 @@
+package com.businessrules.rules.validation
+
+import com.businessrules.model.RuleContext
+import com.businessrules.model.ValidationError
+
+rule "Validate Required Fields"
+    when
+        context : RuleContext(ruleGroup == "validation-rules")
+        eval(context.getData().get("id") == null || context.getData().get("id").toString().isEmpty())
+    then
+        context.addError("id", "required-field", "ID field is required");
+end
+
+rule "Validate Email Format"
+    when
+        context : RuleContext(ruleGroup == "validation-rules")
+        email : String() from context.getData().get("email")
+        eval(email != null && !email.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
+    then
+        context.addError("email", "email-format", "Email format is invalid");
+end
+
+rule "Validate Positive Amount"
+    when
+        context : RuleContext(ruleGroup == "validation-rules")
+        amount : Number() from context.getData().get("amount")
+        eval(amount != null && amount.doubleValue() <= 0)
+    then
+        context.addError("amount", "positive-amount", "Amount must be positive");
+end
