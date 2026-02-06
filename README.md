@@ -9,12 +9,14 @@ A stateless Spring Boot application that processes JSON objects from AWS SQS usi
 - **Parallel Processing**: Rules are executed in parallel for better performance
 - **Stateless Design**: Each request is processed independently
 - **Error Handling**: Comprehensive error reporting and validation
+- **Docker Support**: Containerized deployment with multi-stage builds
+- **CI/CD**: GitHub Actions workflow for automated builds
 
 ## Prerequisites
 
-- Java 17+
+- Java 21+
 - Maven 3.6+
-- Docker and Docker Compose (for local development)
+- Docker (for containerized deployment)
 - AWS Account with SQS queue configured (for production)
 - AWS Credentials configured (via environment variables, IAM role, or AWS CLI)
 
@@ -86,6 +88,8 @@ Set the following environment variables:
 
 ## Building and Running
 
+### Using Maven
+
 ```bash
 # Build the project
 mvn clean package
@@ -95,6 +99,34 @@ mvn spring-boot:run
 
 # Run the application (local development)
 mvn spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+### Using Docker
+
+```bash
+# Build the Docker image
+docker build -t business-rules-engine:latest .
+
+# Run the container
+docker run -p 8080:8080 \
+  -e AWS_REGION=us-east-1 \
+  -e SQS_QUEUE_NAME=your-queue-name \
+  business-rules-engine:latest
+```
+
+### Using GitHub Container Registry
+
+Images are automatically built and pushed to GitHub Container Registry on every push to main:
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/nichom01/business-rules-engine:latest
+
+# Run the container
+docker run -p 8080:8080 \
+  -e AWS_REGION=us-east-1 \
+  -e SQS_QUEUE_NAME=your-queue-name \
+  ghcr.io/nichom01/business-rules-engine:latest
 ```
 
 ## Message Format
@@ -139,3 +171,17 @@ Rules are organized into logical groups:
 - `transformation-rules`: For data transformation
 
 Rules can be executed in parallel by grouping them appropriately.
+
+## CI/CD
+
+The repository includes a GitHub Actions workflow (`.github/workflows/build-and-push.yml`) that:
+- Builds the application with Maven
+- Creates a Docker image
+- Pushes the image to GitHub Container Registry (ghcr.io)
+- Runs on pushes to main, pull requests, and tags
+
+## Health Check
+
+The application includes Spring Boot Actuator with health endpoints:
+- Health endpoint: `http://localhost:8080/actuator/health`
+- Info endpoint: `http://localhost:8080/actuator/info`

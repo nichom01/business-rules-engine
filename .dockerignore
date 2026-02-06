@@ -1,0 +1,16 @@
+target/
+.git/
+.gitignore
+.mvn/
+mvnw
+mvnw.cmd
+*.md
+!README.md
+.vscode/
+.idea/
+*.iml
+.DS_Store
+localstack-data/
+scripts/
+docker-compose.yml
+*.log
