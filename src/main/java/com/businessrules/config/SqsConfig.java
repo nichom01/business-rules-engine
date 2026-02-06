@@ -31,6 +31,15 @@ public class SqsConfig {
     @Value("${aws.secret-access-key:}")
     private String secretAccessKey;
 
+    @Value("${sqs.max-concurrent-messages:10}")
+    private int maxConcurrentMessages;
+
+    @Value("${sqs.max-messages-per-poll:10}")
+    private int maxMessagesPerPoll;
+
+    @Value("${sqs.poll-timeout-seconds:20}")
+    private int pollTimeoutSeconds;
+
     @Bean
     public SqsAsyncClient sqsAsyncClient() {
         SqsAsyncClientBuilder builder = SqsAsyncClient.builder()
@@ -65,8 +74,9 @@ public class SqsConfig {
                         .acknowledgementMode(AcknowledgementMode.ALWAYS)
                         .acknowledgementOrdering(AcknowledgementOrdering.ORDERED)
                         .acknowledgementInterval(Duration.ofSeconds(5))
-                        .maxConcurrentMessages(10)
-                        .maxMessagesPerPoll(10)
+                        .maxConcurrentMessages(maxConcurrentMessages)
+                        .maxMessagesPerPoll(maxMessagesPerPoll)
+                        .pollTimeout(Duration.ofSeconds(pollTimeoutSeconds))
                 )
                 .build();
     }

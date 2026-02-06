@@ -18,6 +18,10 @@ A stateless Spring Boot application that processes JSON objects from AWS SQS usi
 - AWS Account with SQS queue configured (for production)
 - AWS Credentials configured (via environment variables, IAM role, or AWS CLI)
 
+## Configuration
+
+For detailed configuration options including connecting to existing queues and batch size tuning, see [CONFIGURATION.md](CONFIGURATION.md).
+
 ## Local Development Setup
 
 ### Using LocalStack (Recommended)
@@ -76,6 +80,9 @@ Set the following environment variables:
 
 - `AWS_REGION`: AWS region (default: us-east-1)
 - `SQS_QUEUE_NAME`: Name of the SQS queue (default: business-rules-queue)
+- `SQS_MAX_CONCURRENT_MESSAGES`: Max concurrent message processing (default: 10)
+- `SQS_MAX_MESSAGES_PER_POLL`: Messages per poll (default: 10, max: 10)
+- `SQS_POLL_TIMEOUT_SECONDS`: Poll timeout in seconds (default: 20, max: 20)
 
 ## Building and Running
 

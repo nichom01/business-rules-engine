@@ -10,6 +10,11 @@ spring:
 
 sqs:
   queue-name: ${SQS_QUEUE_NAME:business-rules-queue}
+  queue-url: ${SQS_QUEUE_URL:}
+  # Batch processing configuration
+  max-concurrent-messages: ${SQS_MAX_CONCURRENT_MESSAGES:10}
+  max-messages-per-poll: ${SQS_MAX_MESSAGES_PER_POLL:10}
+  poll-timeout-seconds: ${SQS_POLL_TIMEOUT_SECONDS:20}
 
 logging:
   level:
